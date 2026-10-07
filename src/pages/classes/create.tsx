@@ -113,10 +113,11 @@ const Create = () => {
                   control={control}
                   render={({ field, fieldState }) => (
                     <Field data-invalid={fieldState.invalid}>
-                      <FieldLabel htmlFor="form-rhf-demo-title">
+                      <FieldLabel htmlFor="class-banner">
                         Banner Image <span className="text-orange-600">*</span>
                       </FieldLabel>
                       <UploadWidget
+                        id="class-banner"
                         value={
                           field.value
                             ? {
@@ -144,12 +145,12 @@ const Create = () => {
                   control={control}
                   render={({ field, fieldState }) => (
                     <Field data-invalid={fieldState.invalid}>
-                      <FieldLabel htmlFor="form-rhf-demo-title">
+                      <FieldLabel htmlFor="class-name">
                         Class Name <span className="text-orange-600">*</span>
                       </FieldLabel>
                       <Input
                         {...field}
-                        id="form-rhf-demo-title"
+                        id="class-name"
                         aria-invalid={fieldState.invalid}
                         placeholder="Introduction to Biology - Section A"
                         autoComplete="off"
@@ -166,7 +167,7 @@ const Create = () => {
                     control={control}
                     render={({ field, fieldState }) => (
                       <Field data-invalid={fieldState.invalid}>
-                        <FieldLabel htmlFor="form-rhf-demo-title">
+                        <FieldLabel htmlFor="class-subject">
                           Subject <span className="text-orange-600">*</span>
                         </FieldLabel>
                         <Select
@@ -179,7 +180,7 @@ const Create = () => {
                               : undefined
                           }
                         >
-                          <SelectTrigger>
+                          <SelectTrigger id="class-subject">
                             <SelectValue placeholder="Select a subject" />
                           </SelectTrigger>
                           <SelectContent>
@@ -205,7 +206,7 @@ const Create = () => {
                     control={control}
                     render={({ field, fieldState }) => (
                       <Field data-invalid={fieldState.invalid}>
-                        <FieldLabel htmlFor="form-rhf-demo-title">
+                        <FieldLabel htmlFor="class-teacher">
                           Teacher <span className="text-orange-600">*</span>
                         </FieldLabel>
                         <Select
@@ -218,7 +219,7 @@ const Create = () => {
                               : undefined
                           }
                         >
-                          <SelectTrigger>
+                          <SelectTrigger id="class-teacher">
                             <SelectValue placeholder="Select a teacher" />
                           </SelectTrigger>
                           <SelectContent>
@@ -244,14 +245,14 @@ const Create = () => {
                     control={control}
                     render={({ field, fieldState }) => (
                       <Field data-invalid={fieldState.invalid}>
-                        <FieldLabel htmlFor="form-rhf-demo-title">
+                        <FieldLabel htmlFor="class-capacity">
                           Capacity <span className="text-orange-600">*</span>
                         </FieldLabel>
                         <Input
                           {...field}
                           type="number"
                           min={0}
-                          id="form-rhf-demo-title"
+                          id="class-capacity"
                           aria-invalid={fieldState.invalid}
                           placeholder="30"
                           autoComplete="off"
@@ -268,7 +269,7 @@ const Create = () => {
                     control={control}
                     render={({ field, fieldState }) => (
                       <Field data-invalid={fieldState.invalid}>
-                        <FieldLabel htmlFor="form-rhf-demo-title">
+                        <FieldLabel htmlFor="class-status">
                           Status <span className="text-orange-600">*</span>
                         </FieldLabel>
                         <Select
@@ -281,7 +282,7 @@ const Create = () => {
                               : undefined
                           }
                         >
-                          <SelectTrigger>
+                          <SelectTrigger id="class-status">
                             <SelectValue placeholder="Select status" />
                           </SelectTrigger>
                           <SelectContent>
@@ -301,7 +302,7 @@ const Create = () => {
                   control={control}
                   render={({ field, fieldState }) => (
                     <Field data-invalid={fieldState.invalid}>
-                      <FieldLabel htmlFor="form-rhf-demo-title">
+                      <FieldLabel htmlFor="class-description">
                         Description <span className="text-orange-600">*</span>
                       </FieldLabel>
                       <Textarea

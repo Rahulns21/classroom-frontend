@@ -8,6 +8,7 @@ import { Trash2, UploadCloud } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
 interface UploadWidgetProps {
+    id?: string;
     value?: UploadWidgetValue | null;
     onChange?: (value: UploadWidgetValue | null) => void;
     disabled?: boolean;
