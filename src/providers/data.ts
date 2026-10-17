@@ -37,6 +37,11 @@ const options: CreateDataProviderOptions = {
           if (field === "department") params.department = value;
           if (field === "name" || field === "code") params.search = value;
         }
+
+        if (resource === "users") {
+          if (field === "role") params.role = value;
+          if (field === "name" || field === "email") params.search = value; 
+        }
       });
 
       return params;
@@ -63,6 +68,7 @@ const options: CreateDataProviderOptions = {
     buildBodyParams: async ({ variables }) => variables,
 
     mapResponse: async (response) => {
+      if (!response.ok) throw await buildHttpError(response);
       const json: CreateResponse = await response.json();
 
       return json.data ?? [];
