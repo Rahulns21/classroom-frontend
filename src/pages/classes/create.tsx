@@ -19,13 +19,13 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
 import UploadWidget from "@/components/upload-widget";
-import { subjects, teachers } from "@/constants";
 import { classSchema } from "@/lib/schema";
-import { UploadWidgetValue } from "@/types";
+import { Subject, UploadWidgetValue, User } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useBack } from "@refinedev/core";
+import { useBack, useList } from "@refinedev/core";
 import { Loader2 } from "lucide-react";
-import { Controller, ControllerRenderProps, useForm } from "react-hook-form";
+import { Controller, ControllerRenderProps } from "react-hook-form";
+import { useForm } from "@refinedev/react-hook-form"
 import { z } from "zod";
 
 type ClassFormValues = z.infer<typeof classSchema>;
@@ -33,7 +33,7 @@ type ClassFormValues = z.infer<typeof classSchema>;
 const Create = () => {
   const back = useBack();
 
-  const form = useForm<z.infer<typeof classSchema>>({
+  const form = useForm({
     resolver: zodResolver(classSchema),
     defaultValues: {
       name: "",
@@ -47,19 +47,43 @@ const Create = () => {
   });
 
   const {
+    refineCore: { onFinish },
     handleSubmit,
     formState: { isSubmitting, errors },
     control,
   } = form;
 
-  const onSubmit = (data: z.infer<typeof classSchema>) => {
+  const onSubmit = async (data: z.infer<typeof classSchema>) => {
     try {
-      console.log(data);
+      await onFinish(data);
     } catch (e) {
       console.log("Error creating new classes", e);
     }
   };
 
+  const { query: subjectsQuery } = useList<Subject>({
+    resource: 'subjects',
+    pagination: {
+      pageSize: 100
+    }
+  });
+
+  const { query: teachersQuery } = useList<User>({
+    resource: 'users',
+    filters: [
+      { field: 'role', operator: 'eq', value: 'teacher' }
+    ],
+    pagination: {
+      pageSize: 100
+    }
+  });
+
+  const subjects = subjectsQuery?.data?.data || [];
+  const subjectsLoading = subjectsQuery.isLoading;
+
+  const teachers = teachersQuery?.data?.data || [];
+  const teachersLoading = teachersQuery.isLoading;
+ 
   const bannerPublicId = form.watch("bannerCldPubId");
 
   const setBannerImage = (
@@ -179,6 +203,7 @@ const Create = () => {
                               ? String(field.value)
                               : undefined
                           }
+                          disabled={subjectsLoading}
                         >
                           <SelectTrigger id="class-subject">
                             <SelectValue placeholder="Select a subject" />
@@ -218,6 +243,7 @@ const Create = () => {
                               ? String(field.value)
                               : undefined
                           }
+                          disabled={teachersLoading}
                         >
                           <SelectTrigger id="class-teacher">
                             <SelectValue placeholder="Select a teacher" />
