@@ -1,5 +1,5 @@
 import { BACKEND_BASE_URL } from "@/constants";
-import { CreateResponse, ListResponse } from "@/types";
+import { CreateResponse, GetOneResponse, ListResponse } from "@/types";
 import { HttpError } from "@refinedev/core";
 import { createDataProvider, CreateDataProviderOptions } from "@refinedev/rest";
 
@@ -89,6 +89,24 @@ const options: CreateDataProviderOptions = {
       const json: CreateResponse = await response.json();
 
       return json.data ?? [];
+    },
+  },
+
+  getOne: {
+    getEndpoint: ({ resource, id }) => `${resource}/${id}`,
+
+    mapResponse: async (response) => {
+      if (!response.ok) {
+        throw new Error(`Request failed with status ${response.status}`);
+      }
+
+      const json: GetOneResponse = await response.json();
+
+      if (!json.data) {
+        throw new Error("Record not found");
+      }
+
+      return json.data;
     },
   },
 };
