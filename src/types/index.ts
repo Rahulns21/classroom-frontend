@@ -105,6 +105,7 @@ export type ClassDetails = {
     courseName: string;
     bannerUrl?: string;
     bannerCldPubId?: string;
+    subjectId?: number;
     subject?: Subject;
     teacher?: User;
     department?: Department;
