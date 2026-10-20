@@ -26,7 +26,7 @@ const ClassesList = () => {
 
   const { query: subjectsQuery } = useList<Subject>({
     resource: "subjects",
-    pagination: { pageSize: 100 },
+    pagination: { pageSize: 1000 },
   });
 
   const { query: teachersQuery } = useList<User>({
@@ -100,6 +100,8 @@ const ClassesList = () => {
       {
         id: "subject",
         accessorFn: (row) => {
+          if (row.subject?.name) return row.subject.name;
+
           const subject = subjects.find((s) => s.id === row.subjectId);
           return subject?.name ?? "Unknown";
         },
