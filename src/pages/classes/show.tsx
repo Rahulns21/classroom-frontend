@@ -13,7 +13,7 @@ import { AdvancedImage } from "@cloudinary/react";
 import { bannerPhoto } from "@/lib/cloudinary";
 
 const ClassesShow = () => {
-  const { query } = useShow<ClassDetails>({ resource: "classes" });
+  const { query } = useShow<ClassDetails>();
 
   const classDetails = query.data?.data;
   const { isLoading, isError } = query;
@@ -44,16 +44,11 @@ const ClassesShow = () => {
     description,
     status,
     capacity,
-    courseCode,
-    courseName,
     bannerUrl,
     bannerCldPubId,
-    subjectId,
     subject,
     teacher,
     department,
-    schedules,
-    inviteCode,
   } = classDetails;
 
   return (
@@ -61,10 +56,10 @@ const ClassesShow = () => {
       <ShowViewHeader resource="classes" title="Class Details" />
 
       <div className="banner">
-        {bannerUrl ? (
+        {bannerUrl && bannerCldPubId ? (
           <AdvancedImage
             alt="Class Banner"
-            cldImg={bannerPhoto(bannerCldPubId ?? "", name)}
+            cldImg={bannerPhoto(bannerCldPubId, name)}
           />
         ) : (
           <div className="flex items-center justify-center">

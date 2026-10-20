@@ -96,11 +96,19 @@ const options: CreateDataProviderOptions = {
     getEndpoint: ({ resource, id }) => `${resource}/${id}`,
 
     mapResponse: async (response) => {
+      if (!response.ok) {
+        throw new Error(`Request failed with status ${response.status}`);
+      }
+
       const json: GetOneResponse = await response.json();
 
-      return json.data ?? [];
-    }
-  }
+      if (!json.data) {
+        throw new Error("Record not found");
+      }
+
+      return json.data;
+    },
+  },
 };
 
 const { dataProvider } = createDataProvider(BACKEND_BASE_URL, options);
