@@ -44,12 +44,24 @@ const ClassesList = () => {
   const subjectFilters =
     selectedSubject === "all"
       ? []
-      : [{ field: "subjectId", operator: "eq" as const, value: selectedSubject }];
+      : [
+          {
+            field: "subjectId",
+            operator: "eq" as const,
+            value: selectedSubject,
+          },
+        ];
 
   const teacherFilters =
     selectedTeacher === "all"
       ? []
-      : [{ field: "teacherId", operator: "eq" as const, value: selectedTeacher }];
+      : [
+          {
+            field: "teacherId",
+            operator: "eq" as const,
+            value: selectedTeacher,
+          },
+        ];
 
   const searchFilters = searchQuery
     ? [{ field: "name", operator: "contains" as const, value: searchQuery }]
@@ -62,15 +74,29 @@ const ClassesList = () => {
         accessorKey: "bannerUrl",
         size: 80,
         header: () => <p className="column-title ml-2">Banner</p>,
-        cell: ({ getValue }) => (
-          <div className="ml-2 flex items-center justify-center">
-            <img
-              src={getValue<string>() || "/placeholder-class.png"}
-              alt="Class Banner"
-              className="h-10 w-10 rounded object-cover"
-            />
-          </div>
-        ),
+        cell: ({ getValue }) => {
+          const url = getValue<string>();
+
+          // Check for null, undefined, or empty strings
+          const hasImage = url && url.trim() !== "" && url !== "null";
+
+          return (
+            <div className="ml-2 flex items-center justify-center">
+              <img
+                // 1. Use the URL if it exists, otherwise use placeholder
+                src={hasImage ? url : "/placeholder-class.svg"}
+                alt="Class Banner"
+                className="h-10 w-10 rounded object-cover"
+                // 2. If the image link is broken (404), swap to placeholder
+                onError={(e) => {
+                  e.currentTarget.src = "/placeholder-class.svg";
+                  // Optional: Prevent infinite loop if placeholder is also missing
+                  e.currentTarget.onerror = null;
+                }}
+              />
+            </div>
+          );
+        },
       },
       {
         id: "name",
