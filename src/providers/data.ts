@@ -4,10 +4,10 @@ import { HttpError } from "@refinedev/core";
 import { createDataProvider, CreateDataProviderOptions } from "@refinedev/rest";
 
 const buildHttpError = async (response: Response): Promise<HttpError> => {
-  let message = 'Request failed.'
+  let message = "Request failed.";
 
   try {
-    const payload = (await response.json()) as { message?: string }
+    const payload = (await response.json()) as { message?: string };
 
     if (payload.message) message = payload.message;
   } catch {
@@ -17,8 +17,8 @@ const buildHttpError = async (response: Response): Promise<HttpError> => {
   return {
     message,
     statusCode: response.status,
-  }
-}
+  };
+};
 
 const options: CreateDataProviderOptions = {
   getList: {
@@ -40,7 +40,24 @@ const options: CreateDataProviderOptions = {
 
         if (resource === "users") {
           if (field === "role") params.role = value;
-          if (field === "name" || field === "email") params.search = value; 
+          if (field === "name" || field === "email") params.search = value;
+        }
+
+        if (resource === "classes" || resource === "users") {
+          // Map teacher ID
+          if (field === "teacherId") {
+            params.teacher = value;
+          }
+
+          // Map subject ID (classes only)
+          if (field === "subjectId") {
+            params.subject = value;
+          }
+
+          // Map the search box
+          if (field === "name" && filter.operator === "contains") {
+            params.search = value;
+          }
         }
       });
 
@@ -72,8 +89,8 @@ const options: CreateDataProviderOptions = {
       const json: CreateResponse = await response.json();
 
       return json.data ?? [];
-    }
-  }
+    },
+  },
 };
 
 const { dataProvider } = createDataProvider(BACKEND_BASE_URL, options);
